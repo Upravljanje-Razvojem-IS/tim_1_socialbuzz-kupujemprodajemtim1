@@ -24,7 +24,7 @@ namespace RankingService.Services
             _logger = logger;
         }
 
-        public TransportRateConfirmationDTO Create(TransportRateCreateDTO dto)
+        public TransportRateConfirmationDto Create(TransportRateCreateDto dto)
         {
             Transport transport = TransportMock.Transports.FirstOrDefault(e => e.Id == dto.TransportId);
 
@@ -45,7 +45,7 @@ namespace RankingService.Services
 
             _logger.Log("Create TransportRate");
 
-            return _mapper.Map<TransportRateConfirmationDTO>(newRate);
+            return _mapper.Map<TransportRateConfirmationDto>(newRate);
         }
 
         public void Delete(Guid id)
@@ -60,25 +60,25 @@ namespace RankingService.Services
             }
         }
 
-        public List<TransportRateReadDTO> Get()
+        public List<TransportRateReadDto> Get()
         {
             var list = _context.TransportRate.ToList();
 
             _logger.Log("Get TransportRates");
 
-            return _mapper.Map<List<TransportRateReadDTO>>(list);
+            return _mapper.Map<List<TransportRateReadDto>>(list);
         }
 
-        public TransportRateReadDTO Get(Guid id)
+        public TransportRateReadDto Get(Guid id)
         {
             var rate = _context.TransportRate.FirstOrDefault(e => e.Id == id);
 
             _logger.Log("Get TransportRate");
 
-            return _mapper.Map<TransportRateReadDTO>(rate);
+            return _mapper.Map<TransportRateReadDto>(rate);
         }
 
-        public TransportRateConfirmationDTO Update(Guid id, TransportRateCreateDTO dto)
+        public TransportRateConfirmationDto Update(Guid id, TransportRateCreateDto dto)
         {
             Transport transport = TransportMock.Transports.FirstOrDefault(e => e.Id == dto.TransportId);
 
@@ -99,7 +99,7 @@ namespace RankingService.Services
 
             _logger.Log("Update TransportRate");
 
-            return _mapper.Map<TransportRateConfirmationDTO>(rate);
+            return _mapper.Map<TransportRateConfirmationDto>(rate);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace RankingService.Services
             _logger = logger;
         }
 
-        public UserRateConfirmationDTO Create(UserRateCreateDTO dto)
+        public UserRateConfirmationDto Create(UserRateCreateDto dto)
         {
             User transport = UserMock.Users.FirstOrDefault(e => e.Id == dto.UserId);
 
@@ -45,7 +45,7 @@ namespace RankingService.Services
 
             _logger.Log("Create UserRate");
 
-            return _mapper.Map<UserRateConfirmationDTO>(newRate);
+            return _mapper.Map<UserRateConfirmationDto>(newRate);
         }
 
         public void Delete(Guid id)
@@ -60,26 +60,26 @@ namespace RankingService.Services
             }
         }
 
-        public List<UserRateReadDTO> Get()
+        public List<UserRateReadDto> Get()
         {
             var list = _context.UserRate.ToList();
 
 
             _logger.Log("Get UserRates");
 
-            return _mapper.Map<List<UserRateReadDTO>>(list);
+            return _mapper.Map<List<UserRateReadDto>>(list);
         }
 
-        public UserRateReadDTO Get(Guid id)
+        public UserRateReadDto Get(Guid id)
         {
             var rate = _context.UserRate.FirstOrDefault(e => e.Id == id);
 
             _logger.Log("Get UserRate");
 
-            return _mapper.Map<UserRateReadDTO>(rate);
+            return _mapper.Map<UserRateReadDto>(rate);
         }
 
-        public UserRateConfirmationDTO Update(Guid id, UserRateCreateDTO dto)
+        public UserRateConfirmationDto Update(Guid id, UserRateCreateDto dto)
         {
             User transport = UserMock.Users.FirstOrDefault(e => e.Id == dto.UserId);
 
@@ -100,7 +100,7 @@ namespace RankingService.Services
 
             _logger.Log("Update UserRate");
 
-            return _mapper.Map<UserRateConfirmationDTO>(rate);
+            return _mapper.Map<UserRateConfirmationDto>(rate);
         }
     }
 }

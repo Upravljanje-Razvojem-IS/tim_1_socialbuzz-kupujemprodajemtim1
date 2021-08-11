@@ -4,7 +4,7 @@ namespace RankingService.Mocks
 {
     public static class UserMock
     {
-        public static List<User> Users = new List<User>()
+        public readonly static List<User> Users = new List<User>()
         {
             new User()
             {

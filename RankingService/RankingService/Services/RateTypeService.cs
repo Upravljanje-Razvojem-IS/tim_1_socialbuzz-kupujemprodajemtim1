@@ -25,7 +25,7 @@ namespace RankingService.Services
             _logger = logger;
         }
 
-        public RateTypeConfirmationDTO Create(RateTypeCreateDTO dto)
+        public RateTypeConfirmationDto Create(RateTypeCreateDto dto)
         {
             RateType rateType = new RateType()
             {
@@ -38,7 +38,7 @@ namespace RankingService.Services
 
             _logger.Log("Create RateType");
 
-            return _mapper.Map<RateTypeConfirmationDTO>(rateType);
+            return _mapper.Map<RateTypeConfirmationDto>(rateType);
         }
 
         public void Delete(Guid id)
@@ -53,25 +53,25 @@ namespace RankingService.Services
             }
         }
 
-        public List<RateTypeReadDTO> Get()
+        public List<RateTypeReadDto> Get()
         {
             var list = _context.RateTypes.ToList();
 
             _logger.Log("Get RateTypes");
 
-            return _mapper.Map<List<RateTypeReadDTO>>(list);
+            return _mapper.Map<List<RateTypeReadDto>>(list);
         }
 
-        public RateTypeReadDTO Get(Guid id)
+        public RateTypeReadDto Get(Guid id)
         {
             var rateType = _context.RateTypes.FirstOrDefault(e => e.Id == id);
 
             _logger.Log("Get RateType");
 
-            return _mapper.Map<RateTypeReadDTO>(rateType);
+            return _mapper.Map<RateTypeReadDto>(rateType);
         }
 
-        public RateTypeConfirmationDTO Update(Guid id, RateTypeCreateDTO dto)
+        public RateTypeConfirmationDto Update(Guid id, RateTypeCreateDto dto)
         {
             var rate = _context.RateTypes.FirstOrDefault(e => e.Id == id);
 
@@ -84,7 +84,7 @@ namespace RankingService.Services
 
             _logger.Log("Update RateType");
 
-            return _mapper.Map<RateTypeConfirmationDTO>(rate);
+            return _mapper.Map<RateTypeConfirmationDto>(rate);
         }
     }
 }

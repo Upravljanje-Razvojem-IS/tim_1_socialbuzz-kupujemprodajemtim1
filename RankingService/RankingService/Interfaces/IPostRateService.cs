@@ -6,10 +6,10 @@ namespace RankingService.Interfaces
 {
     public interface IPostRateService
     {
-        List<PostRateReadDTO> Get();
-        PostRateReadDTO Get(Guid id);
-        PostRateConfirmationDTO Create(PostRateCreateDTO dto);
-        PostRateConfirmationDTO Update(Guid id, PostRateCreateDTO dto);
+        List<PostRateReadDto> Get();
+        PostRateReadDto Get(Guid id);
+        PostRateConfirmationDto Create(PostRateCreateDto dto);
+        PostRateConfirmationDto Update(Guid id, PostRateCreateDto dto);
         void Delete(Guid id);
     }
 }

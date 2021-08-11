@@ -2,7 +2,7 @@
 
 namespace RankingService.DTOs
 {
-    public class RateTypeConfirmationDTO
+    public class RateTypeConfirmationDto
     {
         public Guid Id { get; set; }
         public string RateTypeName { get; set; }

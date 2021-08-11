@@ -4,7 +4,7 @@ namespace RankingService.Mocks
 {
     public static class TransportMock
     {
-        public static List<Transport> Transports = new List<Transport>()
+        public readonly static List<Transport> Transports = new List<Transport>()
         {
             new Transport()
             {

@@ -1,6 +1,6 @@
 ﻿namespace RankingService.DTOs
 {
-    public class RateTypeCreateDTO
+    public class RateTypeCreateDto
     {
         public string RateTypeName { get; set; }
     }

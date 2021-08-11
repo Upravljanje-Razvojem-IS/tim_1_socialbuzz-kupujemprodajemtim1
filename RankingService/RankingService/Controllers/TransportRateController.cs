@@ -64,7 +64,7 @@ namespace RankingService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public ActionResult Post([FromBody] TransportRateCreateDTO dto)
+        public ActionResult Post([FromBody] TransportRateCreateDto dto)
         {
             var entity = _service.Create(dto);
 
@@ -80,7 +80,7 @@ namespace RankingService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, TransportRateCreateDTO dto)
+        public ActionResult Put(Guid id, TransportRateCreateDto dto)
         {
             var entity = _service.Update(id, dto);
 

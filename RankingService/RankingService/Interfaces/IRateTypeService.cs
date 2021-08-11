@@ -6,10 +6,10 @@ namespace RankingService.Interfaces
 {
     public interface IRateTypeService
     {
-        List<RateTypeReadDTO> Get();
-        RateTypeReadDTO Get(Guid id);
-        RateTypeConfirmationDTO Create(RateTypeCreateDTO dto);
-        RateTypeConfirmationDTO Update(Guid id, RateTypeCreateDTO dto);
+        List<RateTypeReadDto> Get();
+        RateTypeReadDto Get(Guid id);
+        RateTypeConfirmationDto Create(RateTypeCreateDto dto);
+        RateTypeConfirmationDto Update(Guid id, RateTypeCreateDto dto);
         void Delete(Guid id);
     }
 }

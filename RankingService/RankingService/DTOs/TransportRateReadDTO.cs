@@ -2,7 +2,7 @@
 
 namespace RankingService.DTOs
 {
-    public class TransportRateReadDTO
+    public class TransportRateReadDto
     {
         public Guid Id { get; set; }
         public int RateScale { get; set; }

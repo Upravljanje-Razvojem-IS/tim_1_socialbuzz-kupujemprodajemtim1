@@ -4,7 +4,7 @@ namespace RankingService.Mocks
 {
     public static class PostMock
     {
-        public static List<Post> Posts = new List<Post>()
+        public readonly static List<Post> Posts = new List<Post>()
         {
             new Post()
             {

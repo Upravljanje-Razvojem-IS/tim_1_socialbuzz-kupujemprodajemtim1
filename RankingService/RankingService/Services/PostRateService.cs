@@ -24,7 +24,7 @@ namespace RankingService.Services
             _logger = logger;
         }
 
-        public PostRateConfirmationDTO Create(PostRateCreateDTO dto)
+        public PostRateConfirmationDto Create(PostRateCreateDto dto)
         {
             Post post = PostMock.Posts.FirstOrDefault(e => e.Id == dto.PostId);
 
@@ -45,7 +45,7 @@ namespace RankingService.Services
 
             _logger.Log("Create PostRate");
 
-            return _mapper.Map<PostRateConfirmationDTO>(newRate);
+            return _mapper.Map<PostRateConfirmationDto>(newRate);
         }
 
         public void Delete(Guid id)
@@ -59,25 +59,25 @@ namespace RankingService.Services
             }
         }
 
-        public List<PostRateReadDTO> Get()
+        public List<PostRateReadDto> Get()
         {
             var list = _context.PostRate.ToList();
 
             _logger.Log("Get PostRates");
 
-            return _mapper.Map<List<PostRateReadDTO>>(list);
+            return _mapper.Map<List<PostRateReadDto>>(list);
         }
 
-        public PostRateReadDTO Get(Guid id)
+        public PostRateReadDto Get(Guid id)
         {
             var rate = _context.PostRate.FirstOrDefault(e => e.Id == id);
 
             _logger.Log("Get PostRate");
 
-            return _mapper.Map<PostRateReadDTO>(rate);
+            return _mapper.Map<PostRateReadDto>(rate);
         }
 
-        public PostRateConfirmationDTO Update(Guid id, PostRateCreateDTO dto)
+        public PostRateConfirmationDto Update(Guid id, PostRateCreateDto dto)
         {
             Post post = PostMock.Posts.FirstOrDefault(e => e.Id == dto.PostId);
 
@@ -98,7 +98,7 @@ namespace RankingService.Services
 
             _logger.Log("Update PostRate");
 
-            return _mapper.Map<PostRateConfirmationDTO>(rate);
+            return _mapper.Map<PostRateConfirmationDto>(rate);
         }
     }
 }
