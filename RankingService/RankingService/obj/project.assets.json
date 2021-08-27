@@ -5580,23 +5580,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Laptop\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Nebojsa Ivancevic\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\URIS\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\RankingService.csproj",
+      "projectUniqueName": "C:\\Users\\Nebojsa Ivancevic\\source\\repos\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\RankingService.csproj",
       "projectName": "RankingService",
-      "projectPath": "E:\\URIS\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\RankingService.csproj",
-      "packagesPath": "C:\\Users\\Laptop\\.nuget\\packages\\",
-      "outputPath": "E:\\URIS\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\obj\\",
+      "projectPath": "C:\\Users\\Nebojsa Ivancevic\\source\\repos\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\RankingService.csproj",
+      "packagesPath": "C:\\Users\\Nebojsa Ivancevic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Nebojsa Ivancevic\\source\\repos\\tim_1_socialbuzz-kupujemprodajemtim1\\RankingService\\RankingService\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Laptop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Nebojsa Ivancevic\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5667,7 +5663,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
