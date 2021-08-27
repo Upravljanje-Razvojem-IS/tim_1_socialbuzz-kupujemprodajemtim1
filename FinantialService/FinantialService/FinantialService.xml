@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FinantialService</name>
+    </assembly>
+    <members>
+        <member name="T:FinantialService.Controllers.TransactionController">
+            <summary>
+            ReST controller with CRUD operations for transactions
+            </summary>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.CreateTransaction(FinantialService.Models.TransactionCreateDto)">
+             <summary>
+             Creates new transaction (order)
+             </summary>
+             <param name="transaction">Transaction model</param>
+             <returns>Confirmation of created transaction</returns>
+             <remarks>
+             Example of a post request \
+             POST /api/transactions \
+             {     \
+                 "BuyerId": "f9168c5e-ceb2-4faa-b6bf-329bf39fa1e5",\
+                 "ProductId" : "b6496c4a-f938-4863-b3b7-2db52e4271dc",\
+                 "ProductsQuantity": 2,\
+                 "TransportTypeId": "6a411c13-a195-48f7-8dbd-67596c3974c1",\
+                 "DeliveryAddress" : "Strazilovska 123",\
+                 "DeliveryCity" : "Novi Sad" \
+            }
+             </remarks>
+             <response code="200">Returns created transaction (order)</response>
+             <response code="404">Product or transport type does not exist</response>
+             <response code="406">There is no enough products for order</response>
+             <response code="500">Server error</response>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.GetTransactions(System.Guid,System.String,System.String)">
+            <summary>
+            Returns all transaction (orders).
+            </summary>
+            <param name="buyerId">Buyer id</param>
+            <param name="deliveryAddress">The address to which the order is delivered (e.g. Strazilovska 10)</param>
+            <param name="deliveryCity">The city where the order is delivered  (e.g. Novi Sad)</param>
+            <returns>Lista of transactions (orders)</returns>
+            <response code="200">Returns list of transactions (orders)</response>
+            <response code="404">There is no transactions(if param specified - there is no transactions with specified param)</response>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.GetTransaction(System.Guid)">
+            <summary>
+            Returns one transaction with specified id.
+            </summary>
+            <param name="transactionId">Transaction id</param>
+            <returns>Transaction with specified id</returns>
+            <response code="200">Returns transaction with specified id</response>
+            <response code="404">There is no transaction with soecified id</response>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.UpdateTransaction(FinantialService.Models.TransactionUpdateDto)">
+             <summary>
+             Updates quantity, delivery address or delivery city of one transaction (order)
+             </summary>
+             <param name="transaction">Transaction model for updating</param>
+             <returns>Update confirmation</returns>
+             <remarks>
+             Example of a update request \
+             PUT /api/transactions \
+             {     \
+                 "TransactionId": "52b0cbe6-661d-4b79-55c1-08d968d41dcd",\
+                 "ProductsQuantity": 2,\
+                 "DeliveryAddress" : "Strazilovska 123",\
+                 "DeliveryCity" : "Novi Sad" \
+            }
+             </remarks>
+             <response code="200">Returns updated transaction</response>
+             <response code="404">There is no transaction you want to update</response>
+             <response code="406">There is no enough products for order</response>
+             <response code="500">Server error</response>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.DeleteTransaction(System.Guid)">
+            <summary>
+            Deletes one transaction with specified id
+            </summary>
+            <param name="transactionId">Transaction id</param>
+            <response code="200">Transaction successfully deleted</response>
+            <response code="404">There is no transaction with specified id</response>
+            <response code="500">Server error</response>
+        </member>
+        <member name="M:FinantialService.Controllers.TransactionController.GetTransactionOptions">
+            <summary>
+            Returns allowed options
+            </summary>
+        </member>
+        <member name="T:FinantialService.Entities.Transaction">
+            <summary>
+            Represents order for product 
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.TransactionId">
+            <summary>
+            Transaction id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.BuyerId">
+            <summary>
+            Buyer id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.ProductId">
+            <summary>
+            Product id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.TransportTypeId">
+            <summary>
+            Transport type id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.BuyingDateTime">
+            <summary>
+            Date end time of order
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.ProductsQuantity">
+            <summary>
+            Quantity of ordered products
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.DeliveryAddress">
+            <summary>
+            The address to which the order is delivered
+            </summary>
+        </member>
+        <member name="P:FinantialService.Entities.Transaction.DeliveryCity">
+            <summary>
+            The city where the order is delivered
+            </summary>
+        </member>
+        <member name="T:FinantialService.Models.TransactionCreateDto">
+            <summary>
+            DTO for creating a transaction
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.BuyerId">
+            <summary>
+            Buyer id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.ProductId">
+            <summary>
+            Product id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.TransportTypeId">
+            <summary>
+            Transport type id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.ProductsQuantity">
+            <summary>
+            Quantity of ordered products
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.DeliveryAddress">
+            <summary>
+            The address to which the order is delivered
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionCreateDto.DeliveryCity">
+            <summary>
+            The city where the order is delivered
+            </summary>
+        </member>
+        <member name="T:FinantialService.Models.TransactionDto">
+            <summary>
+            DTO for Transaction
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.TransactionId">
+            <summary>
+            Transaction id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.BuyerId">
+            <summary>
+            Buyer id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.ProductId">
+            <summary>
+            Product id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.TransportTypeId">
+            <summary>
+            Transport type id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.BuyingDateTime">
+            <summary>
+            Date end time of order
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.ProductsQuantity">
+            <summary>
+            Quantity of ordered products
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionDto.DeliveryInfo">
+            <summary>
+            The address and city where the order is delivered
+            </summary>
+        </member>
+        <member name="T:FinantialService.Models.TransactionUpdateDto">
+            <summary>
+            DTO for updating a transaction
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionUpdateDto.TransactionId">
+            <summary>
+            Transaction id
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionUpdateDto.ProductsQuantity">
+            <summary>
+            Quantity of ordered products
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionUpdateDto.DeliveryAddress">
+            <summary>
+            The address to which the order is delivered
+            </summary>
+        </member>
+        <member name="P:FinantialService.Models.TransactionUpdateDto.DeliveryCity">
+            <summary>
+            The city where the order is delivered
+            </summary>
+        </member>
+    </members>
+</doc>
