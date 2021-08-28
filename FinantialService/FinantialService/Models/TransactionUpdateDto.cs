@@ -18,11 +18,6 @@ namespace FinantialService.Models
         public Guid TransactionId { get; set; }
 
         /// <summary>
-        /// Quantity of ordered products
-        /// </summary>
-        public int? ProductsQuantity { get; set; }
-
-        /// <summary>
         /// The address to which the order is delivered
         /// </summary>
         public string DeliveryAddress { get; set; }

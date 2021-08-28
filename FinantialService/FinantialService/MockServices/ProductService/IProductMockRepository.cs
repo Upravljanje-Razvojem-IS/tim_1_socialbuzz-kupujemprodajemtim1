@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinantialService.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,9 +7,15 @@ using System.Threading.Tasks;
 namespace FinantialService.MockServices.ProductService
 {
     public interface IProductMockRepository
-    { 
-        bool ProductExistsById(Guid productId);
+    {
+        Product GetProductById(Guid productId);
 
         bool HasEnoughProducts(Guid productId, int? quantity);
+
+        bool ProductPurchased(TransactionReduceStockDto purchased);
+
+        bool ProductReturned(TransactionReduceStockDto returned);
+
+
     }
 }

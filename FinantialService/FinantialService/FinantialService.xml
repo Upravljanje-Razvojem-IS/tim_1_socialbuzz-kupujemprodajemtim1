@@ -63,7 +63,6 @@
              PUT /api/transactions \
              {     \
                  "TransactionId": "52b0cbe6-661d-4b79-55c1-08d968d41dcd",\
-                 "ProductsQuantity": 2,\
                  "DeliveryAddress" : "Strazilovska 123",\
                  "DeliveryCity" : "Novi Sad" \
             }
@@ -215,11 +214,6 @@
         <member name="P:FinantialService.Models.TransactionUpdateDto.TransactionId">
             <summary>
             Transaction id
-            </summary>
-        </member>
-        <member name="P:FinantialService.Models.TransactionUpdateDto.ProductsQuantity">
-            <summary>
-            Quantity of ordered products
             </summary>
         </member>
         <member name="P:FinantialService.Models.TransactionUpdateDto.DeliveryAddress">

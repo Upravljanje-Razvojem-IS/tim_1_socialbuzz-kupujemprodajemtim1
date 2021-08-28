@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using FinantialService.Data.Interfaces;
 using FinantialService.Entities;
+using FinantialService.MockServices.AccountService;
 using FinantialService.MockServices.ProductService;
 using FinantialService.MockServices.TransportService;
+using FinantialService.MockServices.UserService;
 using FinantialService.Models;
-using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,14 +31,29 @@ namespace FinantialService.Controllers
         private readonly IProductMockRepository productMockRepository;
         private readonly ITransportTypeMockRepository transportTypeMockRepository;
         private readonly LinkGenerator linkGenerator;
+        private readonly IValidator<Transaction> transactionValidator;
+        private readonly ILogger logger;
+        private readonly IAccountMockRepository accountMockRepository;
+        private readonly IUserMockRepository userMockRepository;
 
-        public TransactionController(ITransactionRepository transactionRepository, IMapper mapper, IProductMockRepository productMockRepository, ITransportTypeMockRepository transportTypeMockRepository, LinkGenerator linkGenerator)
+        public TransactionController(
+            ITransactionRepository transactionRepository,
+            IMapper mapper, IProductMockRepository productMockRepository,
+            ITransportTypeMockRepository transportTypeMockRepository,
+            LinkGenerator linkGenerator, IValidator<Transaction> transactionValidator,
+            ILogger logger,
+            IAccountMockRepository accountMockRepository,
+            IUserMockRepository userMockRepository)
         {
             this.transactionRepository = transactionRepository;
             this.mapper = mapper;
             this.productMockRepository = productMockRepository;
             this.transportTypeMockRepository = transportTypeMockRepository;
             this.linkGenerator = linkGenerator;
+            this.transactionValidator = transactionValidator;
+            this.logger = logger;
+            this.accountMockRepository = accountMockRepository;
+            this.userMockRepository = userMockRepository;
         }
 
 
@@ -70,7 +88,9 @@ namespace FinantialService.Controllers
         {
             try
             {
-                if (!productMockRepository.ProductExistsById(transaction.ProductId))
+                var product = productMockRepository.GetProductById(transaction.ProductId);
+
+                if (product == null)
                 {
 
                     return NotFound("Product with specified id does not exist.");
@@ -79,14 +99,14 @@ namespace FinantialService.Controllers
 
                 if (!productMockRepository.HasEnoughProducts(transaction.ProductId, transaction.ProductsQuantity))
                 {
-                    
+
                     return StatusCode(StatusCodes.Status406NotAcceptable, "There is no enough products.");
 
                 }
 
                 if (!transportTypeMockRepository.TransportTypeExistsById(transaction.TransportTypeId))
                 {
-                    
+
                     return NotFound("Transport type with specified id does not exist.");
                 }
 
@@ -96,16 +116,70 @@ namespace FinantialService.Controllers
                 transactionEntity.BuyingDateTime = DateTime.Now;
 
                 Transaction createdTransaction = transactionRepository.CreateTransaction(transactionEntity);
+                var valid = transactionValidator.Validate(createdTransaction);
+                if (!valid.IsValid)
+                {
+                    return BadRequest(valid.Errors);
+                }
+
+                //Trazimo usera da bismo dobili id naloga sa kog treba da skinemo novac
+                var user = userMockRepository.GetAccounByUserId(transaction.BuyerId);
+
+                if (user == null)
+                {
+                    return NotFound("User with specified id does not exist.");
+                }
+
+                //Trazimo nalog sa kog treba da skinemo novac
+                var account = accountMockRepository.getAccountById(user.AccountId);
+
+                //Iznos koji treba da skinemo sa naloga
+                decimal amount = product.Price * transaction.ProductsQuantity;
+
+                if (account == null)
+                {
+                    return NotFound("User does not have account.");
+                }
+
+                if (account.AccountBalance < amount)
+                {
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "You do not have enough money to buy this product.");
+                }
+
+                TransactionChargeDto charge = new TransactionChargeDto { AccountId = account.AccountId, Amount = amount };
+
+                //Naplacujemo
+                bool charged = accountMockRepository.charge(charge);
+
+                //Proveravamo da li je naplaceno
+                if (!charged)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while charging, contact administration");
+                }
+
+                //Smanjujemo broj proizvoda na lageru
+                TransactionReduceStockDto purchase = new TransactionReduceStockDto { ProductId = transaction.ProductId, Quantity = transaction.ProductsQuantity };
+
+                bool reducedStock = productMockRepository.ProductPurchased(purchase);
+
+                if (!reducedStock)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while stock reducing, contact administration");
+                }
+
                 transactionRepository.SaveChanges();
 
-                string location = linkGenerator.GetPathByAction("GetTransaction", "Transaction", new { transactionId = createdTransaction.TransactionId});
+                logger.Log(LogLevel.Information, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction successfully created.");
+
+                string location = linkGenerator.GetPathByAction("GetTransaction", "Transaction", new { transactionId = createdTransaction.TransactionId });
 
                 return Created(location, mapper.Map<TransactionDto>(createdTransaction));
-         
-                
+
+
             }
             catch (Exception e)
             {
+                logger.Log(LogLevel.Warning, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction successfully created.", e);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error " + e.Message);
             }
         }
@@ -121,8 +195,8 @@ namespace FinantialService.Controllers
         /// <response code="200">Returns list of transactions (orders)</response>
         /// <response code="404">There is no transactions(if param specified - there is no transactions with specified param)</response>
         [HttpGet]
-        [HttpHead] 
-        [ProducesResponseType(StatusCodes.Status200OK)] 
+        [HttpHead]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<List<TransactionDto>> GetTransactions(Guid buyerId, string deliveryAddress, string deliveryCity)
         {
@@ -169,7 +243,6 @@ namespace FinantialService.Controllers
         /// PUT /api/transactions \
         /// {     \
         ///     "TransactionId": "52b0cbe6-661d-4b79-55c1-08d968d41dcd",\
-        ///     "ProductsQuantity": 2,\
         ///     "DeliveryAddress" : "Strazilovska 123",\
         ///     "DeliveryCity" : "Novi Sad" \
         ///}
@@ -186,7 +259,7 @@ namespace FinantialService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<TransactionDto> UpdateTransaction([FromBody] TransactionUpdateDto transaction)
         {
-            try 
+            try
             {
                 var oldTransaction = transactionRepository.GetTransactionById(transaction.TransactionId);
                 if (oldTransaction == null)
@@ -194,20 +267,25 @@ namespace FinantialService.Controllers
                     return NotFound("There is no transaction with specified id.");
                 }
 
-                if(transaction.ProductsQuantity != null && !productMockRepository.HasEnoughProducts(oldTransaction.ProductId, transaction.ProductsQuantity))
-                {
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "There is no enough products.");
-                }
-
                 mapper.Map(transaction, oldTransaction);
 
+                var valid = transactionValidator.Validate(oldTransaction);
+
+                if (!valid.IsValid)
+                {
+                    return BadRequest(valid.Errors);
+                }
+
                 transactionRepository.SaveChanges();
+
+                logger.Log(LogLevel.Information, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction successfully updated.");
 
                 return Ok(mapper.Map<TransactionDto>(oldTransaction));
 
             }
             catch (Exception e)
             {
+                logger.Log(LogLevel.Warning, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction unsuccessfully updated.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error " + e.Message);
             }
         }
@@ -236,10 +314,46 @@ namespace FinantialService.Controllers
 
                 transactionRepository.DeleteTransaction(transactionId);
                 transactionRepository.SaveChanges();
+
+                //Proizvod koji je kupljen
+                var product = productMockRepository.GetProductById(transaction.ProductId);
+
+                //Uvecaj broj dostupnih proizvoda
+                TransactionReduceStockDto returnee = new TransactionReduceStockDto { ProductId = product.ProductId, Quantity = (int)transaction.ProductsQuantity };
+
+                bool returned = productMockRepository.ProductReturned(returnee);
+
+                if (!returned)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning products to stock, contact administration");
+                }
+
+                //Vrati novac na racun
+
+                //Pronadji kupca koji je izvrsio transakciju
+                var user = userMockRepository.GetAccounByUserId(transaction.BuyerId);
+
+                //Trazimo nalog na koji vracamo novac
+                var account = accountMockRepository.getAccountById(user.AccountId);
+
+                //Iznos koji treba da vratimo
+                decimal amount = (decimal)(product.Price * transaction.ProductsQuantity);
+
+                TransactionChargeDto refund = new TransactionChargeDto { AccountId = user.AccountId, Amount = amount };
+
+                bool refunded = accountMockRepository.refund(refund);
+
+                if (!refunded)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while refunding, contact administration");
+                }
+
+                logger.Log(LogLevel.Information, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction successfully deleted.");
                 return Ok("Transaction successfully deleted.");
             }
             catch (Exception e)
             {
+                logger.Log(LogLevel.Information, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction unsuccessfully deleted.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error " + e.Message);
             }
         }

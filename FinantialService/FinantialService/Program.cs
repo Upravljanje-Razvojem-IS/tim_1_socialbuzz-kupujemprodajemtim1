@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace FinantialService
 {
     public class Program
@@ -22,5 +23,6 @@ namespace FinantialService
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+            
     }
 }

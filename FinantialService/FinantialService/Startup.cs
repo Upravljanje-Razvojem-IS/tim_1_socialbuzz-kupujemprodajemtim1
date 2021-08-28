@@ -2,9 +2,15 @@ using CommunicationKeyAuthClassLibrary;
 using FinantialService.Data;
 using FinantialService.Data.Interfaces;
 using FinantialService.Data.Repositories;
+using FinantialService.Entities;
 using FinantialService.MockServices;
+using FinantialService.MockServices.AccountService;
 using FinantialService.MockServices.ProductService;
 using FinantialService.MockServices.TransportService;
+using FinantialService.MockServices.UserService;
+using FinantialService.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using LoggingClassLibrary;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,12 +54,15 @@ namespace FinantialService
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSingleton<ILogger, Logger>();
-            services.AddSingleton<Logger, FakeLogger>();
+            services.AddSingleton<ILoggerProvider, LoggerProvider>();
 
             services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             services.AddScoped<IProductMockRepository, ProductMockService>();
             services.AddScoped<ITransportTypeMockRepository, TransportTypeMockService>();
+            services.AddScoped<IAccountMockRepository, AccountMockService>();
+            services.AddScoped<IUserMockRepository, UserMockService>();
+
 
             services.AddSwaggerGen(setupAction => 
             {
@@ -75,13 +84,17 @@ namespace FinantialService
                 setupAction.IncludeXmlComments(xmlCommentsPath);
 
             });
-           
+
+            services.AddMvc().AddFluentValidation();
+            services.AddTransient<IValidator<Transaction>, TransactionValidator>();
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILoggerProvider loggerProvider, ILogger logger)
         {
+            loggerFactory.AddProvider(loggerProvider);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinantialService.MockServices.ProductService
+namespace FinantialService.Models
 {
-    public class Product
+    public class TransactionReduceStockDto
     {
         public Guid ProductId { get; set; }
 
-        public string Name { get; set; }
-
         public int Quantity { get; set; }
-
-        public decimal Price { get; set; }
     }
-
 }

@@ -9,20 +9,19 @@ namespace FinantialService.MockServices.TransportService
     {
         public static List<TransportType> Products { get; set; } = new List<TransportType>()
         {
-            new TransportType
+                new TransportType
                 {
-                    TransportTypeId = Guid.Parse("6a411c13-a195-48f7-8dbd-67596c3974c1"),
+                    TransportTypeId = Guid.Parse("14b114d3-af35-4322-9fc4-7e5b618ccd2e"),
                     Name = "Posta Srbije"
 
                 },
-            new TransportType
+                new TransportType
                 {
-                    TransportTypeId = Guid.Parse("b6496c4a-f938-4863-b3b7-2db52e4271dd"),
+                    TransportTypeId = Guid.Parse("c8a40dbb-7ec7-43fd-9181-30091a4bc26c"),
                     Name = "DExpress"
 
                 },
-            
-                
+
         };
 
         public bool TransportTypeExistsById(Guid transportTypeId)
