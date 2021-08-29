@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "56a2e668-3efb-45f3-8269-f33025b75e38",
+		"name": "FollowService Postman Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:44200/api/follows",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/follows",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"follows"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/follows",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"followerId\": \"695af082-9ff5-441d-95e1-066668ce94ad\",\r\n    \"followedId\": \"5e66446a-166d-40b1-882d-04f60f5d4280\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:44200/api/follows/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"follows",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/follows/63a689ac-d1bb-43f7-5029-08d96a85ec71",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/follows/1aa97c8d-fd82-424c-502a-08d96a85ec71",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"follows",
+						"1aa97c8d-fd82-424c-502a-08d96a85ec71"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/follows/63a689ac-d1bb-43f7-5029-08d96a85ec71",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/follows/1aa97c8d-fd82-424c-502a-08d96a85ec71",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"follows",
+						"1aa97c8d-fd82-424c-502a-08d96a85ec71"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/follows?followerId=5E66446A-166D-40B1-882D-04F60F5D4280",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/follows?followerId=5E66446A-166D-40B1-882D-04F60F5D4280",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"follows"
+					],
+					"query": [
+						{
+							"key": "followerId",
+							"value": "5E66446A-166D-40B1-882D-04F60F5D4280"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

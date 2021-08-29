@@ -39,7 +39,7 @@
             <param name="buyerId">Buyer id</param>
             <param name="deliveryAddress">The address to which the order is delivered (e.g. Strazilovska 10)</param>
             <param name="deliveryCity">The city where the order is delivered  (e.g. Novi Sad)</param>
-            <returns>Lista of transactions (orders)</returns>
+            <returns>List of transactions (orders)</returns>
             <response code="200">Returns list of transactions (orders)</response>
             <response code="404">There is no transactions(if param specified - there is no transactions with specified param)</response>
         </member>
@@ -50,7 +50,7 @@
             <param name="transactionId">Transaction id</param>
             <returns>Transaction with specified id</returns>
             <response code="200">Returns transaction with specified id</response>
-            <response code="404">There is no transaction with soecified id</response>
+            <response code="404">There is no transaction with specified id</response>
         </member>
         <member name="M:FinantialService.Controllers.TransactionController.UpdateTransaction(FinantialService.Models.TransactionUpdateDto)">
              <summary>

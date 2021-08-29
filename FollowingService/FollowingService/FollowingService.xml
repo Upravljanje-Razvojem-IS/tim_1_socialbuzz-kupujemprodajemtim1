@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FollowingService</name>
+    </assembly>
+    <members>
+        <member name="M:FollowingService.Controllers.FollowController.CreateFollow(FollowingService.Models.FollowCreateDto)">
+             <summary>
+             Creates new follow
+             </summary>
+             <param name="follow">Follow model</param>
+             <returns>Confirmation of created follow</returns>
+             <remarks>
+             Example of a post request \
+             POST /api/follows \
+             {     \
+                 "BuyerId": "f9168c5e-ceb2-4faa-b6bf-329bf39fa1e5",\
+                 "ProductId" : "b6496c4a-f938-4863-b3b7-2db52e4271dc",\
+                 "TransportTypeId": "6a411c13-a195-48f7-8dbd-67596c3974c1",\
+            }
+             </remarks>
+             <response code="200">Returns created follow</response>
+             <response code="404">User does not exist</response>
+             <response code="500">Server error</response>
+        </member>
+        <member name="M:FollowingService.Controllers.FollowController.GetFollows(System.Guid)">
+            <summary>
+            Returns all follows.
+            </summary>
+            <param name="followerId">Buyer id</param>
+            <returns>List of follows</returns>
+            <response code="200">Returns list of follows (orders)</response>
+            <response code="404">There is no follow(if param specified - there is no follow with specified param)</response>
+        </member>
+        <member name="M:FollowingService.Controllers.FollowController.GetFollow(System.Guid)">
+            <summary>
+            Returns one follow with specified id.
+            </summary>
+            <param name="followId">Follow id</param>
+            <returns>Follow with specified id</returns>
+            <response code="200">Returns follow with specified id</response>
+            <response code="404">There is no follow with specified id</response>
+        </member>
+        <member name="M:FollowingService.Controllers.FollowController.DeleteFollow(System.Guid)">
+            <summary>
+            Deletes one follow with specified id
+            </summary>
+            <param name="followId">Follow id</param>
+            <response code="200">Follow successfully deleted</response>
+            <response code="404">There is nofollow with specified id</response>
+            <response code="500">Server error</response>
+        </member>
+        <member name="T:FollowingService.Entities.Follow">
+            <summary>
+            Represents follow
+            </summary>
+        </member>
+        <member name="P:FollowingService.Entities.Follow.FollowId">
+            <summary>
+            Follow id
+            </summary>
+        </member>
+        <member name="P:FollowingService.Entities.Follow.FollowedId">
+            <summary>
+            Id of user who is followed
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:FollowingService.Entities.Follow.FollowerId" -->
+        <member name="T:FollowingService.Models.FollowCreateDto">
+            <summary>
+            DTO for creating a follow
+            </summary>
+        </member>
+        <member name="P:FollowingService.Models.FollowCreateDto.FollowedId">
+            <summary>
+            Id of user who is followed
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:FollowingService.Models.FollowCreateDto.FollowerId" -->
+        <member name="T:FollowingService.Models.FollowDto">
+            <summary>
+            DTO for Follow
+            </summary>
+        </member>
+        <member name="P:FollowingService.Models.FollowDto.FollowId">
+            <summary>
+            Follow id
+            </summary>
+        </member>
+        <member name="P:FollowingService.Models.FollowDto.FollowedId">
+            <summary>
+            Id of followed user
+            </summary>
+        </member>
+        <member name="P:FollowingService.Models.FollowDto.FollowerId">
+            <summary>
+            Id of user who is following
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "8e1e3306-43f9-40a8-a7b3-86bd606fc097",
+		"name": "FinantialService Postman Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:44200/api/transactions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/transactions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"buyerId\": \"006e4342-b705-44a1-b644-6d03d40d62a0\",\r\n        \"productId\": \"49420693-be98-4552-bb29-1033a27a44e1\",\r\n        \"transportTypeId\": \"14b114d3-af35-4322-9fc4-7e5b618ccd2e\",\r\n        \"productsQuantity\": 1,\r\n        \"deliveryAddress\": \"Bulevar oslobodjenja 10\",\r\n        \"deliveryCity\":\"Novi Sad\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:44200/api/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/transactions?buyerId=006e4342-b705-44a1-b644-6d03d40d62a0&deliveryAddress=Bulevar oslobodjenja 10&deliveryCity=Novi Sad",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/transactions?buyerId=006e4342-b705-44a1-b644-6d03d40d62a0&deliveryAddress=Bulevar oslobodjenja 10&deliveryCity=Novi Sad",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"transactions"
+					],
+					"query": [
+						{
+							"key": "buyerId",
+							"value": "006e4342-b705-44a1-b644-6d03d40d62a0"
+						},
+						{
+							"key": "deliveryAddress",
+							"value": "Bulevar oslobodjenja 10"
+						},
+						{
+							"key": "deliveryCity",
+							"value": "Novi Sad"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/transactions",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"transactionId\": \"121d2620-e211-4613-b59d-08d96a8b3c52\",\r\n    \"deliveryCity\" : \"Novi Sad\",\r\n    \"deliveryAddress\" : \"Strazilovska 10\"\r\n\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:44200/api/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:44200/api/transactions/121d2620-e211-4613-b59d-08d96a8b3c52",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44200/api/transactions/121d2620-e211-4613-b59d-08d96a8b3c52",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44200",
+					"path": [
+						"api",
+						"transactions",
+						"121d2620-e211-4613-b59d-08d96a8b3c52"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

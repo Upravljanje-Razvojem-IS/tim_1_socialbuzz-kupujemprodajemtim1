@@ -35,7 +35,8 @@ namespace FinantialService.Data.Repositories
             return transactionContext.Transactions.Where(t =>
                                                         (deliveryAddress == null || t.DeliveryAddress == deliveryAddress) &&
                                                         (deliveryCity == null || t.DeliveryCity == deliveryCity) &&
-                                                        (deliveryCity == null || t.BuyerId == buyerId)).ToList(); 
+                                                        (buyerId == Guid.Empty || t.BuyerId == buyerId)).ToList();
+
         }
 
         public Transaction GetTransactionById(Guid transactionId)
@@ -50,6 +51,6 @@ namespace FinantialService.Data.Repositories
             transactionContext.Remove(transaction);
         }
 
-      
+
     }
 }

@@ -28,32 +28,34 @@ namespace FinantialService.Controllers
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly IMapper mapper;
-        private readonly IProductMockRepository productMockRepository;
-        private readonly ITransportTypeMockRepository transportTypeMockRepository;
+        private readonly IProductMockRepository productMockService;
+        private readonly ITransportTypeMockRepository transportTypeMockService;
         private readonly LinkGenerator linkGenerator;
         private readonly IValidator<Transaction> transactionValidator;
         private readonly ILogger logger;
-        private readonly IAccountMockRepository accountMockRepository;
-        private readonly IUserMockRepository userMockRepository;
+        private readonly IAccountMockRepository accountMockService;
+        private readonly IUserMockRepository userMockService;
 
         public TransactionController(
             ITransactionRepository transactionRepository,
-            IMapper mapper, IProductMockRepository productMockRepository,
-            ITransportTypeMockRepository transportTypeMockRepository,
-            LinkGenerator linkGenerator, IValidator<Transaction> transactionValidator,
+            IMapper mapper,
+            IProductMockRepository productMockService,
+            ITransportTypeMockRepository transportTypeMockService,
+            LinkGenerator linkGenerator,
+            IValidator<Transaction> transactionValidator,
             ILogger logger,
-            IAccountMockRepository accountMockRepository,
-            IUserMockRepository userMockRepository)
+            IAccountMockRepository accountMockService,
+            IUserMockRepository userMockService)
         {
             this.transactionRepository = transactionRepository;
             this.mapper = mapper;
-            this.productMockRepository = productMockRepository;
-            this.transportTypeMockRepository = transportTypeMockRepository;
+            this.productMockService = productMockService;
+            this.transportTypeMockService = transportTypeMockService;
             this.linkGenerator = linkGenerator;
             this.transactionValidator = transactionValidator;
             this.logger = logger;
-            this.accountMockRepository = accountMockRepository;
-            this.userMockRepository = userMockRepository;
+            this.accountMockService = accountMockService;
+            this.userMockService = userMockService;
         }
 
 
@@ -88,7 +90,7 @@ namespace FinantialService.Controllers
         {
             try
             {
-                var product = productMockRepository.GetProductById(transaction.ProductId);
+                var product = productMockService.GetProductById(transaction.ProductId);
 
                 if (product == null)
                 {
@@ -97,14 +99,14 @@ namespace FinantialService.Controllers
 
                 }
 
-                if (!productMockRepository.HasEnoughProducts(transaction.ProductId, transaction.ProductsQuantity))
+                if (!productMockService.HasEnoughProducts(transaction.ProductId, transaction.ProductsQuantity))
                 {
 
                     return StatusCode(StatusCodes.Status406NotAcceptable, "There is no enough products.");
 
                 }
 
-                if (!transportTypeMockRepository.TransportTypeExistsById(transaction.TransportTypeId))
+                if (!transportTypeMockService.TransportTypeExistsById(transaction.TransportTypeId))
                 {
 
                     return NotFound("Transport type with specified id does not exist.");
@@ -123,7 +125,7 @@ namespace FinantialService.Controllers
                 }
 
                 //Trazimo usera da bismo dobili id naloga sa kog treba da skinemo novac
-                var user = userMockRepository.GetAccounByUserId(transaction.BuyerId);
+                var user = userMockService.GetAccounByUserId(transaction.BuyerId);
 
                 if (user == null)
                 {
@@ -131,7 +133,7 @@ namespace FinantialService.Controllers
                 }
 
                 //Trazimo nalog sa kog treba da skinemo novac
-                var account = accountMockRepository.getAccountById(user.AccountId);
+                var account = accountMockService.getAccountById(user.AccountId);
 
                 //Iznos koji treba da skinemo sa naloga
                 decimal amount = product.Price * transaction.ProductsQuantity;
@@ -149,7 +151,7 @@ namespace FinantialService.Controllers
                 TransactionChargeDto charge = new TransactionChargeDto { AccountId = account.AccountId, Amount = amount };
 
                 //Naplacujemo
-                bool charged = accountMockRepository.charge(charge);
+                bool charged = accountMockService.charge(charge);
 
                 //Proveravamo da li je naplaceno
                 if (!charged)
@@ -160,7 +162,7 @@ namespace FinantialService.Controllers
                 //Smanjujemo broj proizvoda na lageru
                 TransactionReduceStockDto purchase = new TransactionReduceStockDto { ProductId = transaction.ProductId, Quantity = transaction.ProductsQuantity };
 
-                bool reducedStock = productMockRepository.ProductPurchased(purchase);
+                bool reducedStock = productMockService.ProductPurchased(purchase);
 
                 if (!reducedStock)
                 {
@@ -179,7 +181,7 @@ namespace FinantialService.Controllers
             }
             catch (Exception e)
             {
-                logger.Log(LogLevel.Warning, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction successfully created.", e);
+                logger.Log(LogLevel.Warning, $"requestId: {Request.HttpContext.TraceIdentifier}, previousRequestId:No previous ID, Message: Transaction unsuccessfully created.", e);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error " + e.Message);
             }
         }
@@ -191,7 +193,7 @@ namespace FinantialService.Controllers
         /// <param name="buyerId">Buyer id</param>
         /// <param name="deliveryAddress">The address to which the order is delivered (e.g. Strazilovska 10)</param>
         /// <param name="deliveryCity">The city where the order is delivered  (e.g. Novi Sad)</param>
-        /// <returns>Lista of transactions (orders)</returns>
+        /// <returns>List of transactions (orders)</returns>
         /// <response code="200">Returns list of transactions (orders)</response>
         /// <response code="404">There is no transactions(if param specified - there is no transactions with specified param)</response>
         [HttpGet]
@@ -217,7 +219,7 @@ namespace FinantialService.Controllers
         /// <param name="transactionId">Transaction id</param>
         /// <returns>Transaction with specified id</returns>
         /// <response code="200">Returns transaction with specified id</response>
-        /// <response code="404">There is no transaction with soecified id</response>
+        /// <response code="404">There is no transaction with specified id</response>
         [HttpGet("{transactionId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -316,12 +318,12 @@ namespace FinantialService.Controllers
                 transactionRepository.SaveChanges();
 
                 //Proizvod koji je kupljen
-                var product = productMockRepository.GetProductById(transaction.ProductId);
+                var product = productMockService.GetProductById(transaction.ProductId);
 
                 //Uvecaj broj dostupnih proizvoda
                 TransactionReduceStockDto returnee = new TransactionReduceStockDto { ProductId = product.ProductId, Quantity = (int)transaction.ProductsQuantity };
 
-                bool returned = productMockRepository.ProductReturned(returnee);
+                bool returned = productMockService.ProductReturned(returnee);
 
                 if (!returned)
                 {
@@ -331,17 +333,17 @@ namespace FinantialService.Controllers
                 //Vrati novac na racun
 
                 //Pronadji kupca koji je izvrsio transakciju
-                var user = userMockRepository.GetAccounByUserId(transaction.BuyerId);
+                var user = userMockService.GetAccounByUserId(transaction.BuyerId);
 
                 //Trazimo nalog na koji vracamo novac
-                var account = accountMockRepository.getAccountById(user.AccountId);
+                var account = accountMockService.getAccountById(user.AccountId);
 
                 //Iznos koji treba da vratimo
                 decimal amount = (decimal)(product.Price * transaction.ProductsQuantity);
 
                 TransactionChargeDto refund = new TransactionChargeDto { AccountId = user.AccountId, Amount = amount };
 
-                bool refunded = accountMockRepository.refund(refund);
+                bool refunded = accountMockService.refund(refund);
 
                 if (!refunded)
                 {
