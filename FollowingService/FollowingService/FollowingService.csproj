@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <Reference Include="CommunicationKeyAuthClassLibrary">
-      <HintPath>C:\Users\DK\Downloads\CommunicationKeyAuthClassLibrary.dll</HintPath>
+      <HintPath>..\..\CommunicationKeyAuthClassLibrary.dll</HintPath>
     </Reference>
     <Reference Include="LoggingClassLibrary">
-      <HintPath>C:\Users\DK\Downloads\LoggingClassLibrary.dll</HintPath>
+      <HintPath>..\..\LoggingClassLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 
