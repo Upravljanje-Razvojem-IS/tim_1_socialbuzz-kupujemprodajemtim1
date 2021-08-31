@@ -16,8 +16,6 @@ namespace FinantialService.Data.Interfaces
 
         Transaction CreateTransaction(Transaction transaction);
 
-        //void UpdateTransaction(Transaction transaction);
-
         void DeleteTransaction(Guid transactionId);
     }
 }

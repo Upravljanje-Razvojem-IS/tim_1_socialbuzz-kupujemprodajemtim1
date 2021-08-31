@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FinantialService
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -23,6 +23,6 @@ namespace FinantialService
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-            
+
     }
 }

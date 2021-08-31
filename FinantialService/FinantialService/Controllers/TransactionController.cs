@@ -341,7 +341,7 @@ namespace FinantialService.Controllers
                 //Iznos koji treba da vratimo
                 decimal amount = (decimal)(product.Price * transaction.ProductsQuantity);
 
-                TransactionChargeDto refund = new TransactionChargeDto { AccountId = user.AccountId, Amount = amount };
+                TransactionChargeDto refund = new TransactionChargeDto { AccountId = account.AccountId, Amount = amount };
 
                 bool refunded = accountMockService.refund(refund);
 
