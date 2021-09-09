@@ -7,8 +7,8 @@ namespace AccountService.Data.Interfaces
     {
         IEnumerable<Currency> Get();
         Currency Get(int id);
-        void Create(Currency account);
-        void Update(Currency account);
-        void Delete(Currency account);
+        void Create(Currency currency);
+        void Update(Currency currency);
+        void Delete(Currency currency);
     }
 }

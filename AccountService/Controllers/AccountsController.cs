@@ -149,8 +149,7 @@ namespace AccountService.Controllers
             }
 
             Account account = _accountRepository.Get()
-                .Where(account => account.UserId == userId)
-                .FirstOrDefault();
+                .FirstOrDefault(account => account.UserId == userId);
 
             if (account == null)
             {
