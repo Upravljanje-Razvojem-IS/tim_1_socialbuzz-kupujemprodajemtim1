@@ -165,8 +165,6 @@ namespace UserService
 
             app.UseRouting();
 
-            //  app.UseAuthorization();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(setupAction =>

@@ -21,9 +21,9 @@ namespace UserService.Entities
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("UserDBConnection"));
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
         }
     }
 }

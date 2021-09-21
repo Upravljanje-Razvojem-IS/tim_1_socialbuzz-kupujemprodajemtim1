@@ -33,28 +33,28 @@ namespace UserService.Services.Users
 
         }
 
-        public PersonalUserCreatingConfirmation CreateAdmin(PersonalUser persUser, string password)
+        public PersonalUserCreatingConfirmation CreateAdmin(PersonalUser user, string password)
         {
-            if (!CheckUniqueUsername(persUser.Username, false, null))
+            if (!CheckUniqueUsername(user.Username, false, null))
             {
                 throw new UniqueValueViolationException("Username should be unique");
             }
-            if (!CkeckUniqueEmail(persUser.Email))
+            if (!CkeckUniqueEmail(user.Email))
             {
                 throw new UniqueValueViolationException("Email should be unique");
             }
-            if (!CheckCountry(persUser.CountryId))
+            if (!CheckCountry(user.CountryId))
             {
                 throw new ForeignKeyConstraintViolationException("Foreign key constraint violated");
 
             }
             //Dodavanja u userDbContext
-            PersonalUserCreatingConfirmation userCreated = _personalUserRepository.CreateAdmin(persUser);
+            PersonalUserCreatingConfirmation userCreated = _personalUserRepository.CreateAdmin(user);
             _personalUserRepository.SaveChanges();
 
             //Dodavanje u identityUserDbContext
-            string username = string.Join("", persUser.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            var persuser = new AccountInfo(username, persUser.Email, userCreated.UserId);
+            string username = string.Join("", user.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            var persuser = new AccountInfo(username, user.Email, userCreated.UserId);
             IdentityResult result = _userManager.CreateAsync(persuser, password).Result;
             if (result.Succeeded)
             {
@@ -63,35 +63,34 @@ namespace UserService.Services.Users
             else
             {
                 _personalUserRepository.DeleteUser(userCreated.UserId);
-               // throw new ExectionException("Erorr trying to create user");
 
             }
             return userCreated;
 
         }
 
-        public PersonalUserCreatingConfirmation CreateUser(PersonalUser personalUser, string password)
+        public PersonalUserCreatingConfirmation CreateUser(PersonalUser user, string password)
         {
-            if (!CheckUniqueUsername(personalUser.Username, false, null))
+            if (!CheckUniqueUsername(user.Username, false, null))
             {
                 throw new UniqueValueViolationException("Username should be unique");
             }
-            if (!CkeckUniqueEmail(personalUser.Email))
+            if (!CkeckUniqueEmail(user.Email))
             {
                 throw new UniqueValueViolationException("Email should be unique");
             }
-            if (!CheckCountry(personalUser.CountryId))
+            if (!CheckCountry(user.CountryId))
             {
                 throw new ForeignKeyConstraintViolationException("Foreign key constraint violated");
             }
 
             ////Dodavanje u userDbContext
-            PersonalUserCreatingConfirmation persUserCreated = _personalUserRepository.CreateUser(personalUser);
+            PersonalUserCreatingConfirmation persUserCreated = _personalUserRepository.CreateUser(user);
             _personalUserRepository.SaveChanges();
 
             //Dodavanje u IdentityUserDbContext
-            string username = string.Join("", personalUser.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            var persuser = new AccountInfo(username, personalUser.Email, persUserCreated.UserId);
+            string username = string.Join("", user.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            var persuser = new AccountInfo(username, user.Email, persUserCreated.UserId);
             IdentityResult result = _userManager.CreateAsync(persuser, password).Result;
             if (result.Succeeded)
             {
@@ -123,34 +122,35 @@ namespace UserService.Services.Users
             return _personalUserRepository.GetUsers(country, username);
         }
 
-        public void UpdateUser(PersonalUser updatedPersUser, PersonalUser userWithId)
+        public void UpdateUser(PersonalUser user, PersonalUser userWithId)
         {
-            if (!CheckUniqueUsername(updatedPersUser.Username, true, userWithId.UserId))
+            if (!CheckUniqueUsername(user.Username, true, userWithId.UserId))
             {
                 throw new UniqueValueViolationException("Username should be unique");
             }
-            Country country = _countryRepository.GetCountryByCountryId(updatedPersUser.CountryId);
+            Country country = _countryRepository.GetCountryByCountryId(user.CountryId);
             if (country == null)
             {
                 throw new ForeignKeyConstraintViolationException("Foreign key constraint violated");
             }
 
-            updatedPersUser.RoleId = userWithId.RoleId;
-            updatedPersUser.Email = userWithId.Email;
-            updatedPersUser.Role = _roleRepository.GetRoleByRoleId(userWithId.RoleId);
-            
-            updatedPersUser.Country = country;
-            updatedPersUser.UserId = userWithId.UserId;
-            _mapper.Map(updatedPersUser, userWithId);
+            user.RoleId = userWithId.RoleId;
+            user.Email = userWithId.Email;
+            user.Role = _roleRepository.GetRoleByRoleId(userWithId.RoleId);
+
+            user.Country = country;
+            user.UserId = userWithId.UserId;
+            _mapper.Map(user, userWithId);
             _personalUserRepository.SaveChanges();
 
             AccountInfo persuser = _userManager.FindByIdAsync(userWithId.UserId.ToString()).Result;
-            string username = string.Join("", updatedPersUser.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            string username = string.Join("", user.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             persuser.UserName = username;
             _userManager.UpdateAsync(persuser).Wait();
         }
         private bool CheckUniqueUsername(string username, bool forUpdate, Guid? userId)
         {
+           // ((corpUsers != null && corpUsers.Count > 0) && (!forUpdate || (forUpdate && corpUsers[0].UserId != userId)))
             var corpUsers = _corporationUserRepository.GetUsers(null, username);
             if (corpUsers != null && corpUsers.Count > 0)
             {

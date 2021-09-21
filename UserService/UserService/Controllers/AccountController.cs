@@ -7,11 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Models;
 using UserService.Entities;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Configuration;
+
+
 
 namespace UserService.Controllers
 {
@@ -25,12 +22,10 @@ namespace UserService.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AccountInfo> userManager;
-       private readonly IConfiguration _configuration;
 
-        public AccountController(UserManager<AccountInfo> userManager, IConfiguration configuration)
+        public AccountController(UserManager<AccountInfo> userManager)
       {
             this.userManager = userManager;
-            _configuration = configuration;
         }
 
         /// <summary>
@@ -72,7 +67,6 @@ namespace UserService.Controllers
                 List<string> roles = userManager.GetRolesAsync(account).Result.ToList();
                 AccountInfoDto accountDto = new AccountInfoDto(roles[0], account.Id);
                 response = new CheckAccountResponse(true, "Successful check", accountDto);
-                //string token = GenerateJwtToken(accountDto);
                 return Ok(response);
             }
             catch (Exception)
@@ -83,28 +77,6 @@ namespace UserService.Controllers
 
 
         }
-
-       /* private string GenerateJwtToken(AccountInfoDto user)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim("id", user.Id.ToString())
-            };
-
-            byte[] key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-
-            SigningCredentials credentials = new SigningCredentials(
-                new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
-
-            JwtHeader jwtHeader = new JwtHeader(credentials);
-
-            JwtSecurityToken token = new JwtSecurityToken(jwtHeader,
-                new JwtPayload(claims));
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-            return tokenHandler.WriteToken(token);
-        }*/
 
     }
 }

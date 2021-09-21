@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UserService.Entities
 {
-    public class IdentityDataInitializer
+    public static class IdentityDataInitializer
     {
         public static void SeedData (UserManager<AccountInfo> userManager, RoleManager<AccountRole> roleManager)
         {
