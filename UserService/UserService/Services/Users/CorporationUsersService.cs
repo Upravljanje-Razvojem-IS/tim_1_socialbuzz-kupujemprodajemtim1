@@ -31,28 +31,28 @@ namespace UserService.Services.Users
             _mapper = mapper;
         }
 
-        public CorporationUserCreatingConfirmation CreateUser(CorporationUser corpUser, string password)
+        public CorporationUserCreatingConfirmation CreateUser(CorporationUser user, string password)
         {
-            if (!CheckUniqueUsername(corpUser.Username, false, null))
+            if (!CheckUniqueUsername(user.Username, false, null))
             {
                 throw new UniqueValueViolationException("Username should be unique");
             }
-            if (!CkeckUniqueEmail(corpUser.Email))
+            if (!CkeckUniqueEmail(user.Email))
             {
                 throw new UniqueValueViolationException("Email should be unique");
             }
-            if (!CheckCountry(corpUser.CountryId))
+            if (!CheckCountry(user.CountryId))
             {
                 throw new ForeignKeyConstraintViolationException("Foreign key constraint violated");
 
             }
-            CorporationUserCreatingConfirmation userCreated = _corporationUserRepository.CreateUser(corpUser);
+            CorporationUserCreatingConfirmation userCreated = _corporationUserRepository.CreateUser(user);
             _corporationUserRepository.SaveChanges();
 
 
             //Dodavanje u IdentityUserDbContext
-            string username = string.Join("", corpUser.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
-            var acc = new AccountInfo(username, corpUser.Email, userCreated.UserId);
+            string username = string.Join("", user.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            var acc = new AccountInfo(username, user.Email, userCreated.UserId);
             IdentityResult result = _userManager.CreateAsync(acc, password).Result;
             if (result.Succeeded)
             {
@@ -86,29 +86,29 @@ namespace UserService.Services.Users
             return _corporationUserRepository.GetUsers(country, username);
         }
 
-        public void UpdateUser(CorporationUser updatedCorpUser, CorporationUser userWithId)
+        public void UpdateUser(CorporationUser user, CorporationUser userWithId)
         {
-            if (!CheckUniqueUsername(updatedCorpUser.Username, true, userWithId.UserId))
+            if (!CheckUniqueUsername(user.Username, true, userWithId.UserId))
             {
                 throw new UniqueValueViolationException("Username should be unique");
             }
-            Country country = _countryRepository.GetCountryByCountryId(updatedCorpUser.CountryId);
+            Country country = _countryRepository.GetCountryByCountryId(user.CountryId);
             if (country == null)
             {
                 throw new ForeignKeyConstraintViolationException("Foreign key constraint violated");
 
             }
-            updatedCorpUser.RoleId = userWithId.RoleId;
-            updatedCorpUser.Email = userWithId.Email;
-            updatedCorpUser.Role = _roleRepository.GetRoleByRoleId(userWithId.RoleId);
-            updatedCorpUser.Country = country;
-            updatedCorpUser.UserId = userWithId.UserId;
-            _mapper.Map(updatedCorpUser, userWithId);
+            user.RoleId = userWithId.RoleId;
+            user.Email = userWithId.Email;
+            user.Role = _roleRepository.GetRoleByRoleId(userWithId.RoleId);
+            user.Country = country;
+            user.UserId = userWithId.UserId;
+            _mapper.Map(user, userWithId);
             _corporationUserRepository.SaveChanges();
 
             //Updajteovanje identity tabele
             AccountInfo corpUser = _userManager.FindByIdAsync(userWithId.UserId.ToString()).Result;
-            string username = string.Join("", updatedCorpUser.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            string username = string.Join("", user.Username.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             corpUser.UserName = username;
             _userManager.UpdateAsync(corpUser).Wait();
         }
